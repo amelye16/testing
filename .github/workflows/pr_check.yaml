@@ -1,0 +1,18 @@
+name: PR-Branch-Check-Rule
+
+on:
+  pull_request_target:
+    types: [opened]
+
+jobs:
+  PR-Branch-Check-Rule:
+    name: PR-Branch-Check-Rule
+    if: (github.event.pull_request.base.ref == 'main' && github.event.pull_request.head.ref != 'qa') || (github.event.pull_request.base.ref == 'master' && github.event.pull_request.head.ref != 'qa')
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "🔎 The name of your branch is ${{ github.ref }}"
+    - run: echo "github.event.pull_request.base.ref is ${{ github.event.pull_request.base.ref}}"
+    - run: echo "github.event.pull_request.head.ref ${{ github.event.pull_request.head.ref}}"
+    - uses: superbrothers/close-pull-request@v3
+      with:
+        comment: "PR for Main/Master Branch must be coming from qa branch... "
